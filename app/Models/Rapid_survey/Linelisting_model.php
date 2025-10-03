@@ -5,6 +5,7 @@ namespace App\Models\Rapid_survey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\helpers\DistrictHelper;
 
 class linelisting_model extends Model
 {
@@ -15,6 +16,7 @@ class linelisting_model extends Model
 
     public static function getClustersProvince($searchdata)
     {
+        // dd('here');
         $sql = DB::connection('endline_survey')->table('clusters');
         $sql->select(DB::raw('dist_id,district,COUNT (dist_id) AS totalDistrict'));
         if (isset($searchdata['pageLevel']) && $searchdata['pageLevel'] != '' && $searchdata['pageLevel'] == '2') {
@@ -32,6 +34,8 @@ class linelisting_model extends Model
                 }
             });
         }
+        $sql = DistrictHelper::applyDistrictFilter($sql, 'dist_id');
+
 
         $sql->where(function ($query) {
             $query->where('col_flag')
@@ -58,15 +62,16 @@ class linelisting_model extends Model
         }
         $sql->select(DB::raw($select))->leftJoin('listings as l', 'c.cluster_no', '=', 'l.hh01');
 
-        if (isset($searchdata['district']) && $searchdata['district'] != '') {
-            $dist = $searchdata['district'];
-            $sql->where(function ($query) use ($dist) {
-                $exp_dist = explode(',', $dist);
-                foreach ($exp_dist as $d) {
-                    $query->orWhere('c.dist_id', '=', trim($d));
-                }
-            });
-        }
+        // if (isset($searchdata['district']) && $searchdata['district'] != '') {
+        //     $dist = $searchdata['district'];
+        //     $sql->where(function ($query) use ($dist) {
+        //         $exp_dist = explode(',', $dist);
+        //         foreach ($exp_dist as $d) {
+        //             $query->orWhere('c.dist_id', '=', trim($d));
+        //         }
+        //     });
+        // }
+        $sql = DistrictHelper::applyDistrictFilter($sql, 'dist_id');
 
         $sql->where(function ($query) {
            // $query->whereNotIn('l.username', ['user0113'])
@@ -109,6 +114,7 @@ class linelisting_model extends Model
             (select count(distinct deviceid) FROM [UeN_EL_II].[dbo].[listings] where hh01 = l.hh01 and (hh11!='Deleted' or hh11 is null) AND (col_flag is null or col_flag=0)) as collecting_tabs,
             (select count(*) completed_tabs from(select deviceid, max(cast(hh04 as int)) ms FROM [UeN_EL_II].[dbo].[listings] where hh01a = l.hh01a and (hh11!='Deleted' or hh11 is null) and hh01 = l.hh01 AND (col_flag is null OR col_flag = '0')
             and hh07 = '9'  group by deviceid) AS completed_tabs) completed_tabs";
+        $sql = DistrictHelper::applyDistrictFilter($sql, 'dist_id');
         $sql->select(DB::raw($select))->leftJoin('listings as l', function ($join) {
             $join->on('c.cluster_no', '=', 'l.hh01')
                 ->where(function ($query) {

@@ -177,8 +177,8 @@
                                                 @if (isset($data['districts']) && $data['districts'] != '')
                                                     @foreach ($data['districts'] as $keys=>$d)
                                                         <option
-                                                            value="{{(isset($d->dist_id) && $d->dist_id!=''?$d->dist_id:$d->district)}}">
-                                                            {{(isset($d->district) && $d->district!=''?$d->district:$d->dist_id)}}
+                                                            value="{{(isset($d->dist_id) && $d->dist_id!=''?$d->dist_id:$d->distname)}}">
+                                                            {{(isset($d->distname) && $d->distname!=''?$d->distname:$d->dist_id)}}
                                                         </option>
                                                     @endforeach
                                                 @endif
@@ -263,8 +263,8 @@
                                                 @if (isset($data['districts']) && $data['districts'] != '')
                                                     @foreach ($data['districts'] as $keys=>$d)
                                                         <option
-                                                            value="{{(isset($d->dist_id) && $d->dist_id!=''?$d->dist_id:$d->district)}}">
-                                                            {{(isset($d->district) && $d->district!=''?$d->district:$d->dist_id)}}
+                                                            value="{{(isset($d->dist_id) && $d->dist_id!=''?$d->dist_id:$d->distname)}}">
+                                                            {{(isset($d->distname) && $d->distname!=''?$d->distname:$d->dist_id)}}
                                                         </option>
                                                     @endforeach
                                                 @endif

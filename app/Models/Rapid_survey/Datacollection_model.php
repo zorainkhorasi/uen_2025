@@ -5,6 +5,8 @@ namespace App\Models\Rapid_survey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use app\helpers\DistrictHelper;
+
 
 class datacollection_model extends Model
 {
@@ -31,6 +33,9 @@ class datacollection_model extends Model
                 }
             });
         }
+
+        $sql = DistrictHelper::applyDistrictFilter($sql, 'dist_id');
+
         $sql->where(function ($query) {
             $query->where('col_flag')
                 ->orWhere('col_flag', '=', '0')
@@ -67,6 +72,8 @@ class datacollection_model extends Model
                 }
             });
         }
+
+        $sql = DistrictHelper::applyDistrictFilter($sql, 'dist_id');
         $sql->where(function ($query) {
             $query->where('c.col_flag')
                 ->orWhere('c.col_flag', '=', '0')

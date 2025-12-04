@@ -81,7 +81,7 @@
                                             </div>
                                             <div class="text-left ">
                                                 <p class=" mb-0">Public: {{$total['tot']['public']}}</p>
-                                                <p class=" mb-0">Private: {{$total['tot']['private']}}</p>
+                                                {{-- <p class=" mb-0">Private: {{$total['tot']['private']}}</p> --}}
                                             </div>
                                             <div class="progress" style="height: 10px">
                                                 <div class="progress-bar-animated mysmall_text bg-{{$colors[$s]}}"
@@ -159,7 +159,7 @@
                                             </div>
                                             <div class="text-left ">
                                                 <p class="  mb-0">Public: {{$r['dc']['public']}}</p>
-                                                <p class=" mb-0 ">Private: {{$r['dc']['private']}}</p>
+                                                {{-- <p class=" mb-0 ">Private: {{$r['dc']['private']}}</p> --}}
                                             </div>
                                             <div class="progress" style="height: 10px">
                                                 <div class="progress-bar-animated mysmall_text bg-{{$colors[$s]}}"

@@ -10,6 +10,7 @@
 		'Dashboard' => 'Dashboard',
 		'dashboard' => 'Dashboard',
 		'Default' => 'Default',
+        'get_sessions'=>'Session Summary',
 
         /*=========================Rapid Survey=========================*/
         'rapid_survey' => 'UeN Endline Survey',

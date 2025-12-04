@@ -50,8 +50,10 @@
                                 <tbody>
                                 @php
                                     $sno = 1
+                                    
                                 @endphp
                                 @foreach ($data['data'] as $keys=>$value)
+                                
                                     <tr data-id="{{ $value->id }}">
                                         <td>{{$sno++}}</td>
                                         <td>{{(isset($value->name) && $value->name!=''?$value->name:'')}}</td>
@@ -177,8 +179,8 @@
                                                 @if (isset($data['districts']) && $data['districts'] != '')
                                                     @foreach ($data['districts'] as $keys=>$d)
                                                         <option
-                                                            value="{{(isset($d->dist_id) && $d->dist_id!=''?$d->dist_id:$d->district)}}">
-                                                            {{(isset($d->district) && $d->district!=''?$d->district:$d->dist_id)}}
+                                                            value="{{(isset($d->distcode) && $d->distcode!=''?$d->distcode:$d->district)}}">
+                                                            {{(isset($d->distname) && $d->distname!=''?$d->distname:$d->distcode)}}
                                                         </option>
                                                     @endforeach
                                                 @endif
@@ -262,9 +264,10 @@
                                                 <option value="0">All Districts</option>
                                                 @if (isset($data['districts']) && $data['districts'] != '')
                                                     @foreach ($data['districts'] as $keys=>$d)
+                                                    
                                                         <option
-                                                            value="{{(isset($d->dist_id) && $d->dist_id!=''?$d->dist_id:$d->district)}}">
-                                                            {{(isset($d->district) && $d->district!=''?$d->district:$d->dist_id)}}
+                                                            value="{{(isset($d->distcode) && $d->distcode!=''?$d->distcode:$d->district)}}">
+                                                            {{(isset($d->distname) && $d->distname!=''?$d->distname:$d->distname)}}
                                                         </option>
                                                     @endforeach
                                                 @endif
@@ -669,7 +672,22 @@
                             $('#edit_fullName').val(a[0]['name']);
                             $('#edit_userName').val(a[0]['username']);
                             $('#edit_userEmail').val(a[0]['email']);
-                            $('#edit_district').val(a[0]['district']).select2({'val': a[0]['district']});
+                            // $('#edit_district').val(a[0]['district']).select2({'val': a[0]['district']});
+                          $('#edit_district').val([]).trigger('change');
+
+                            let districts = a[0]['district']; // e.g. "999, 113" ya null
+
+                            if (districts && districts.trim() !== "") {
+                                let districtArray = districts.split(',').map(function(item) {
+                                    return item.trim();
+                                });
+                                console.log(districtArray); // ["999", "113"]
+
+                                $('#edit_district').val(districtArray).trigger('change');
+                            }
+
+                            // Select2 ko set karo
+                            // $('#edit_district').val(districts).trigger('change');
                             $('#edit_designation').val(a[0]['designation']);
                             $('#edit_contactNo').val(a[0]['contact']);
                             $('#edit_userGroup').val(a[0]['idGroup']);

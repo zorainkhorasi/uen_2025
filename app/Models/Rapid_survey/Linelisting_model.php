@@ -15,7 +15,7 @@ class linelisting_model extends Model
 
     public static function getClustersProvince($searchdata)
     {
-        $sql = DB::connection('endline_survey')->table('clusters');
+        $sql = DB::table('clusters');
         $sql->select(DB::raw('dist_id,district,COUNT (dist_id) AS totalDistrict'));
         if (isset($searchdata['pageLevel']) && $searchdata['pageLevel'] != '' && $searchdata['pageLevel'] == '2') {
             $sql->select(DB::raw('dist_id,district,tehsil,COUNT (dist_id) AS totalDistrict'));
@@ -46,7 +46,7 @@ class linelisting_model extends Model
 
     public static function completedClusters_district($searchdata)
     {
-        $sql = DB::connection('endline_survey')->table('clusters as c');
+        $sql = DB::table('clusters as c');
         $select = " l.hh01a,c.district,l.hh01,c.dist_id,(SELECT count(distinct deviceid) FROM Listings
             Where hh01=l.hh01 and (hh11 NOT like ('Deleted') or hh11 IS NULL) AND (col_flag IS NULL OR col_flag=0)) as collecting_tabs,
             (SELECT COUNT(DISTINCT deviceid) completed_tabs FROM (SELECT deviceid,MAX(CAST(hh04 as int)) ms FROM Listings  where  hh01a= l.hh01a and hh01=l.hh01 and

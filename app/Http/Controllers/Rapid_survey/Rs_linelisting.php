@@ -40,16 +40,16 @@ class Rs_linelisting extends Controller
             Custom_Model::trackLogs($trackarray, "all_logs");
 
             $searchdata = array();
-            $searchdata['district'] = '';
+            // $searchdata['district'] = '';
             $searchdata['pageLevel'] = 1;
-            if (
-                isset($data['permission'][0]->CanViewAllDetail) && $data['permission'][0]->CanViewAllDetail != 1
-                && isset(Auth::user()->district) && Auth::user()->district != 0
-            ) {
+            if (isset($data['permission'][0]->CanViewAllDetail) && $data['permission'][0]->CanViewAllDetail != 1
+                && isset(Auth::user()->district) && Auth::user()->district != 0)
+                {
 
-                $searchdata['district'] = Auth::user()->district;
-                // echo $searchdata['district'];die;
-            }
+                    $searchdata['district'] = Auth::user()->district;
+                    // echo $searchdata['district'];die;
+                }
+                // dd('here');
             $getClustersProvince = linelisting_model::getClustersProvince($searchdata);
 
 
@@ -173,17 +173,17 @@ class Rs_linelisting extends Controller
             Custom_Model::trackLogs($trackarray, "all_logs");
 
             $searchFilter = array();
-            if (
-                isset($data['permission'][0]->CanViewAllDetail) && $data['permission'][0]->CanViewAllDetail != 1
-                && isset(Auth::user()->district) && Auth::user()->district != 0
-            ) {
+            if (isset($data['permission'][0]->CanViewAllDetail) && $data['permission'][0]->CanViewAllDetail != 1
+                && isset(Auth::user()->district) && Auth::user()->district != 0) {
                 $searchFilter['district'] = Auth::user()->district;
             }
             if (isset(request()->id) && request()->id != '' && !empty(request()->id)) {
                 $searchFilter['district'] = request()->id;
             }
             $searchFilter['pageLevel'] = 2;
+            // echo 1; die;
             $getClustersProvince = linelisting_model::getClustersProvince($searchFilter);
+            // dd($getClustersProvince);
 
             $overall_dist_array = array();
             $totalcluster = 0;

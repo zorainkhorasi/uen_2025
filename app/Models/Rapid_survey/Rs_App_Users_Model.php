@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\helpers\DistrictHelper;
 
 class Rs_App_Users_Model extends Model
 {
@@ -19,7 +20,9 @@ class Rs_App_Users_Model extends Model
     {
         $sql =DB::connection('endline_survey')->table('users')->select('*');
         $sql->where('enabled', '=', '1')->orderByDesc('id');
+        $sql = DistrictHelper::applyDistrictFilter($sql, 'dist_id');
         $data = $sql->get();
+        // dd($data);
         return $data;
     }
 

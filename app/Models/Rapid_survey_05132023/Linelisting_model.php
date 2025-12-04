@@ -5,6 +5,8 @@ namespace App\Models\Rapid_survey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use APP\helpers\DistrictHelper;
+
 
 class linelisting_model extends Model
 {
@@ -13,8 +15,10 @@ class linelisting_model extends Model
     protected $table = 'listings';
 
 
+    // public static function getClustersProvince($searchdata)
     public static function getClustersProvince($searchdata)
     {
+        dd('here');
         $sql = DB::connection('sqlsrv_rapid_survey')->table('clusters');
         $sql->select(DB::raw('dist_id,district,COUNT (dist_id) AS totalDistrict'));
         if (isset($searchdata['pageLevel']) && $searchdata['pageLevel'] != '' && $searchdata['pageLevel'] == '2') {
@@ -23,15 +27,17 @@ class linelisting_model extends Model
         }
 
         $sql->groupBy('dist_id', 'district');
-        if (isset($searchdata['district']) && $searchdata['district'] != '') {
-            $dist = $searchdata['district'];
-            $sql->where(function ($query) use ($dist) {
-                $exp_dist = explode(',', $dist);
-                foreach ($exp_dist as $d) {
-                    $query->orWhere('dist_id', '=', trim($d));
-                }
-            });
-        }
+        // if (isset($searchdata['district']) && $searchdata['district'] != '') {
+        //     $dist = $searchdata['district'];
+        //     $sql->where(function ($query) use ($dist) {
+        //         $exp_dist = explode(',', $dist);
+        //         foreach ($exp_dist as $d) {
+        //             $query->orWhere('dist_id', '=', trim($d));
+        //         }
+        //     });
+
+        // }
+        $sql = DistrictHelper::applyDistrictFilter($sql, 'dist_id');
 
         $sql->where(function ($query) {
             $query->where('col_flag')
@@ -46,6 +52,8 @@ class linelisting_model extends Model
 
     public static function completedClusters_district($searchdata)
     {
+        // dd('here');
+
         $sql = DB::connection('sqlsrv_rapid_survey')->table('clusters as c');
         $select = "l.enumcode,c.district, l.hh02,  c.dist_id,
 			(select count(distinct deviceid) from listings where hh02 = l.hh02 and enumcode = l.enumcode  and (hh15!='1' or hh15 is null) AND (col_flag is null or col_flag=0 )) as collecting_tabs,
